@@ -1,16 +1,16 @@
-
 import mongoose from 'mongoose'
-import Laundry from '../models/laundry.model.js'
-import { createLaundrySchema } from '../schemas/laundry.schema.js'
+import express from 'express'
+import jurnalharian from '../models/jurnalharian.model.js'
+import { createjurnalharianSchema} from '../controller/jurnalharian.controller.js'
+import { createjurnalharianSchema} from '../controller/jurnalharian.controller.js'
 import {
   apiResponse,
   apiResponseValidation,
 } from '../utils/response.js'
 
-class LaundryController {
-  // Menambahkan data laundry
+class jurnalharianController {
   static async store(req, res) {
-    const result = createLaundrySchema.safeParse(req.body)
+    const result = createjurnalharianSchema.safeParse(req.body)
 
     if (!result.success) {
       return apiResponseValidation({
@@ -20,48 +20,47 @@ class LaundryController {
     }
 
     try {
-      const laundry = await Laundry.create(result.data)
+      const jurnalharian = await jurnalharian.create(result.data)
 
       return apiResponse({
         res,
         status: 201,
-        message: 'Data laundry berhasil ditambahkan',
-        data: laundry,
+        message: 'Data jurnalharian berhasil ditambahkan',
+        data: jurnalharian,
       })
     } catch (error) {
       console.error(error)
       return apiResponse({
         res,
         status: 500,
-        message: 'Gagal menambahkan data laundry',
+        message: 'Gagal menambahkan data jurnalharian',
         data: null,
       })
     }
   }
 
-  // Menampilkan semua data laundry
+  // Menampilkan semua data jurnalharian
   static async index(req, res) {
     try {
-      const laundry = await Laundry.find()
+      const jurnalharian = await jurnalharian.find()
 
       return apiResponse({
         res,
         status: 200,
-        message: 'Data laundry berhasil diambil',
-        data: laundry,
+        message: 'Data jurnalharian berhasil diambil',
+        data: jurnalharian,
       })
     } catch (error) {
       console.error(error)
       return apiResponse({
         res,
         status: 500,
-        message: 'Gagal mengambil data laundry',
+        message: 'Gagal mengambil data jurnalharian',
         data: null,
       })
     }
   }
 
-  // Menampilkan satu data laundry berdasarkan ID
   static async show(req, res) {
     const { id } = req.params
 
@@ -69,19 +68,19 @@ class LaundryController {
       return apiResponse({
         res,
         status: 400,
-        message: 'ID laundry tidak valid',
+        message: 'ID jurnalharian tidak valid',
         data: null,
       })
     }
 
     try {
-      const laundry = await Laundry.findById(id)
+      const jurnalharian = await jurnalharian.findById(id)
 
-      if (!laundry) {
+      if (!jurnalharian) {
         return apiResponse({
           res,
           status: 404,
-          message: 'Data laundry tidak ditemukan',
+          message: 'Data jurnalharian tidak ditemukan',
           data: null,
         })
       }
@@ -89,21 +88,20 @@ class LaundryController {
       return apiResponse({
         res,
         status: 200,
-        message: 'Data laundry berhasil diambil',
-        data: laundry,
+        message: 'Data jurnalharian berhasil diambil',
+        data: jurnalharian,
       })
     } catch (error) {
       console.error(error)
       return apiResponse({
         res,
         status: 500,
-        message: 'Gagal mengambil data laundry',
+        message: 'Gagal mengambil data jurnalharian',
         data: null,
       })
     }
   }
 
-  // Mengubah data laundry berdasarkan ID
   static async update(req, res) {
     const { id } = req.params
 
@@ -111,12 +109,12 @@ class LaundryController {
       return apiResponse({
         res,
         status: 400,
-        message: 'ID laundry tidak valid',
+        message: 'ID jurnalharian tidak valid',
         data: null,
       })
     }
 
-    const result = createLaundrySchema.safeParse(req.body)
+    const result = createjurnalharianSchema.safeParse(req.body)
 
     if (!result.success) {
       return apiResponseValidation({
@@ -126,17 +124,17 @@ class LaundryController {
     }
 
     try {
-      const laundry = await Laundry.findByIdAndUpdate(
+      const jurnalharian = await jurnalharian.findByIdAndUpdate(
         id,
         result.data,
         { new: true, runValidators: true },
       )
 
-      if (!laundry) {
+      if (!jurnalharian) {
         return apiResponse({
           res,
           status: 404,
-          message: 'Data laundry tidak ditemukan',
+          message: 'Data jurnalharian tidak ditemukan',
           data: null,
         })
       }
@@ -144,21 +142,20 @@ class LaundryController {
       return apiResponse({
         res,
         status: 200,
-        message: 'Data laundry berhasil diperbarui',
-        data: laundry,
+        message: 'Data jurnalharian berhasil diperbarui',
+        data: jurnalharian,
       })
     } catch (error) {
       console.error(error)
       return apiResponse({
         res,
         status: 500,
-        message: 'Gagal memperbarui data laundry',
+        message: 'Gagal memperbarui data jurnalhariany',
         data: null,
       })
     }
   }
 
-  // Menghapus data laundry berdasarkan ID
   static async destroy(req, res) {
     const { id } = req.params
 
@@ -166,19 +163,19 @@ class LaundryController {
       return apiResponse({
         res,
         status: 400,
-        message: 'ID laundry tidak valid',
+        message: 'ID jurnalharian tidak valid',
         data: null,
       })
     }
 
     try {
-      const laundry = await Laundry.findByIdAndDelete(id)
+      const jurnalharian = await jurnalharian.findByIdAndDelete(id)
 
-      if (!laundry) {
+      if (!jurnalharian) {
         return apiResponse({
           res,
           status: 404,
-          message: 'Data laundry tidak ditemukan',
+          message: 'Data jurnalharian tidak ditemukan',
           data: null,
         })
       }
@@ -186,19 +183,18 @@ class LaundryController {
       return apiResponse({
         res,
         status: 200,
-        message: 'Data laundry berhasil dihapus',
-        data: laundry,
+        message: 'Data jurnalharian berhasil dihapus',
+        data: jurnalharian,
       })
     } catch (error) {
       console.error(error)
       return apiResponse({
         res,
         status: 500,
-        message: 'Gagal menghapus data laundry',
+        message: 'Gagal menghapus data jurnalharian',
         data: null,
       })
     }
   }
 }
 
-export default LaundryController

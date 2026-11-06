@@ -14,20 +14,14 @@ export const errorHandler = (err, req, res, next) => {
     errors = z.flattenError(err).fieldErrors
   } else if (err.code === 11000) {
     statusCode = 409
-    const fields = err.keyValue ? Object.keys(err.keyValue) : []
-    const fieldName = fields.join(', ') || 'field'
-    message = `Duplicate value entered for ${fieldName}`
-    errors = err.keyValue
-      ? Object.fromEntries(
-          Object.entries(err.keyValue).map(([field, value]) => [
-            field,
-            [`${field} '${value}' already exists`],
-          ]),
-        )
-      : null
+    message = 'Data jurnal harian sudah tersedia'
+    errors = err.keyValue || null
   } else if (err.type === 'entity.parse.failed') {
     statusCode = 400
     message = 'Malformed JSON payload'
+  } else if (err.name === 'CastError') {
+    statusCode = 400
+    message = 'Invalid ID format'
   }
 
   const isProduction = process.env.NODE_ENV === 'production'
@@ -43,11 +37,10 @@ export const errorHandler = (err, req, res, next) => {
 }
 
 export const notFoundHandler = (req, res, next) => {
-  if (req.originalUrl.startsWith('/api') || req.xhr || req.accepts('json')) {
-    return next(new AppError(`Resource not found: ${req.method} ${req.originalUrl}`, 404))
-  }
-
-  return res.status(404).render('pages/404', {
-    title: '404 - Page Not Found',
-  })
+  return next(
+    new AppError(
+      `Resource not found: ${req.method} ${req.originalUrl}`,
+      404,
+    ),
+  )
 }
